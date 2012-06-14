@@ -15,15 +15,26 @@ module SpentTimeRequired
 
             module InstanceMethods
                 def update_with_check_spent_time
-                    msg = Setting.plugin_spent_time_required['required_msg']
+                    @closed = Setting.plugin_spent_time_required['restrict_to_closed']
                     if (params[:time_entry][:hours] == "")
-                        flash[:error] = msg
-                        find_issue
-                        update_issue_from_params
-                        render(:action => 'edit') and return
-                    else
-                        update_without_check_spent_time
+                        msg = Setting.plugin_spent_time_required['required_msg']
+                        if (@closed)
+                            @status = IssueStatus.find(params[:issue][:status_id])
+                            if (@status.is_closed)
+                                flash[:error] = msg
+                                find_issue
+                                update_issue_from_params
+                                render(:action => 'edit') and return
+                            end
+                        else
+                            flash[:error] = msg
+                            find_issue
+                            update_issue_from_params
+                            render(:action => 'edit') and return
+                        end
+
                     end
+                    update_without_check_spent_time
                 end
             end
         end

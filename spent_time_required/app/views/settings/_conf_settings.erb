@@ -1,4 +1,8 @@
 <p>
-  <label for="settings_statuses">Required message</label>
+  <label for="settings_required_msg">Required message</label>
   <%= text_field_tag 'settings[required_msg]', @settings['required_msg'] %>
+</p>
+<p>
+  <label for="settings_restrict_to_closed">Only closed statuses</label>
+  <%= check_box_tag 'settings[restrict_to_closed]', 1, @settings['restrict_to_closed'] %>
 </p>

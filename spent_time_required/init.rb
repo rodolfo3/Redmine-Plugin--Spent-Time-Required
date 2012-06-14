@@ -15,6 +15,7 @@ Redmine::Plugin.register :spent_time_required do
   author_url 'https://github.com/rodolfo3'
 
   settings(:default => {
-        'required_msg' => 'Spent time is required now. Do not forget it!'
+        'required_msg' => 'Spent time is required now. Do not forget it!',
+        'restrict_to_closed' => true,
   }, :partial => 'settings/conf_settings')
 end
