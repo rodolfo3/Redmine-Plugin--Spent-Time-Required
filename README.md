@@ -9,5 +9,11 @@ Configurations
 # Required message
 Text message to show when "spent time" is not filled
 
-# Only closed statuses
-If checked, force only "closed" statuses on issue to fill "spent time". If it's NOT, "spent time" is required for all statuses.
+# All statuses
+Always ask top fill "spent time"
+
+# Closed statuses
+If checked, force "closed" statuses on issue to fill "spent time".
+
+# Status
+Selected status require "spent time" on update.
