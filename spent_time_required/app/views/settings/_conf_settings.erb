@@ -1,8 +1,22 @@
 <p>
   <label for="settings_required_msg">Required message</label>
-  <%= text_field_tag 'settings[required_msg]', @settings['required_msg'] %>
+  <%= text_field_tag 'settings[required_msg]', @settings[:required_msg] %>
 </p>
 <p>
-  <label for="settings_restrict_to_closed">Only closed statuses</label>
-  <%= check_box_tag 'settings[restrict_to_closed]', 1, @settings['restrict_to_closed'] %>
+  <label for="settings_all_statuses">All statuses</label>
+  <%= check_box_tag 'settings[all_statuses]', 1, @settings[:all_statuses] %>
+</p>
+<p>
+  <label for="all_closed_statuses">Closed statuses</label>
+  <%= check_box_tag 'settings[all_closed_statuses]', 1, @settings[:all_closed_statuses] %>
+</p>
+<p>
+  <label>Status</label>
+  <% IssueStatus.all.each do |status| %>
+      <%= check_box_tag 'settings[list_status][' + status.id.to_s + ']', 1, @settings[:list_status][status.id.to_s] %>
+      <%= status %>
+      <!-- to always have ":list_status" key into the hash -->
+      <input type="hidden" name="settings[list_status][0]" value="1" />
+    <br/>
+  <% end %>
 </p>

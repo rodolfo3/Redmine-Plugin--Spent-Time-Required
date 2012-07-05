@@ -15,25 +15,35 @@ module SpentTimeRequired
 
             module InstanceMethods
                 def update_with_check_spent_time
-                    @closed = Setting.plugin_spent_time_required['restrict_to_closed']
-                    if (params.has_key?(:time_entry) and params[:time_entry][:hours] == "")
-                        msg = Setting.plugin_spent_time_required['required_msg']
-                        if (@closed)
-                            @status = IssueStatus.find(params[:issue][:status_id])
-                            if (@status.is_closed)
-                                flash[:error] = msg
-                                find_issue
-                                update_issue_from_params
-                                render(:action => 'edit') and return
-                            end
-                        else
-                            flash[:error] = msg
-                            find_issue
-                            update_issue_from_params
-                            render(:action => 'edit') and return
-                        end
 
+                    @check = false
+                    if (params.has_key?(:time_entry))
+                        @status = IssueStatus.find(params[:issue][:status_id])
+                        @settings = Setting.plugin_spent_time_required
+                        @check = ( \
+                              @settings[:all_statuses] \
+                          or \
+                          ( \
+                              @settings[:all_closed_statuses] \
+                              and \
+                              @status.is_closed? \
+                          ) \
+                          or \
+                          ( \
+                              @settings[:list_status].has_key?(@status.id.to_s) \
+                              and \
+                              @settings[:list_status][@status.id.to_s].to_i == 1 \
+                          ) \
+                        )
                     end
+
+                    if (@check and params[:time_entry][:hours] == "")
+                        flash[:error] = @settings[:required_msg]
+                        find_issue
+                        update_issue_from_params
+                        render(:action => 'edit') and return
+                    end
+
                     update_without_check_spent_time
                 end
             end
