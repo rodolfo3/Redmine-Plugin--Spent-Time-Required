@@ -16,7 +16,7 @@ module SpentTimeRequired
             module InstanceMethods
                 def update_with_check_spent_time
                     @closed = Setting.plugin_spent_time_required['restrict_to_closed']
-                    if (params[:time_entry][:hours] == "")
+                    if (params.has_key?(:time_entry) and params[:time_entry][:hours] == "")
                         msg = Setting.plugin_spent_time_required['required_msg']
                         if (@closed)
                             @status = IssueStatus.find(params[:issue][:status_id])
